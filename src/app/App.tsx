@@ -2,17 +2,17 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaView, StyleSheet, View, Text, Alert } from "react-native";
 
-import Card from "./src/components/Card";
-import TextInputField from "./src/components/TextInputField";
-import DropdownField from "./src/components/DropdownField";
-import PrimaryButton from "./src/components/PrimaryButton";
+import Card from "../components/Card";
+import TextInputField from "../components/TextInputField";
+import DropdownField from "../components/DropdownField";
+import PrimaryButton from "../components/PrimaryButton";
 
-import { useHarvestForm } from "./src/hooks/useHarvestForm";
+import { useHarvestForm } from "../hooks/useHarvestForm";
 
-import { WEIGHT_OPTIONS, PLACEHOLDERS } from "./src/constants/form.constants";
-import type { CropOption } from "./src/types/harvest.types";
+import { WEIGHT_OPTIONS, PLACEHOLDERS } from "../constants/form.constants";
+import type { CropOption } from "../types/harvest.types";
 
-import { PDFGeneratorService } from "./src/services/PDFGeneratorService";
+import { PDFGeneratorService } from "../services/PDFGeneratorService";
 
 export default function App() {
   const {
@@ -31,14 +31,16 @@ export default function App() {
 
     try {
       const result = await PDFGeneratorService.generateHarvestPDF(pdfData);
-      
+
       Alert.alert(
         "PDF generado exitosamente",
         `El PDF se guardó en:\n${result.location}\n\nArchivo: ${result.fileName}`,
-        [{ 
-          text: "OK", 
-          onPress: resetForm 
-        }]
+        [
+          {
+            text: "OK",
+            onPress: resetForm,
+          },
+        ]
       );
     } catch (error: any) {
       Alert.alert("Error", `No se pudo generar el PDF: ${error.message}`);
@@ -74,11 +76,12 @@ export default function App() {
               required
             />
 
-            <DropdownField<CropOption>
+            <DropdownField<string>
               label="Cosecha"
               value={formData.crop}
               onValueChange={(value) => handleFieldChange("crop", value)}
               options={WEIGHT_OPTIONS}
+              error={errors.crop}
             />
 
             <TextInputField

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import Entypo from '@expo/vector-icons/Entypo';
+import Entypo from "@expo/vector-icons/Entypo";
 
 interface DropdownOption<T = string> {
   label: string;
@@ -9,9 +9,10 @@ interface DropdownOption<T = string> {
 
 interface DropdownFieldProps<T = string> {
   label: string;
-  value: T;
-  onValueChange: (value: T) => void;
+  value: T | null;
+  onValueChange: (value: T | null) => void;
   options: DropdownOption<T>[];
+  error?: string;
 }
 
 function DropdownField<T extends string>({
@@ -19,6 +20,7 @@ function DropdownField<T extends string>({
   value,
   onValueChange,
   options,
+  error,
 }: DropdownFieldProps<T>) {
   return (
     <View style={styles.inputWrapper}>
@@ -31,8 +33,15 @@ function DropdownField<T extends string>({
           onValueChange={onValueChange}
           mode="dropdown"
           dropdownIconColor="#ffffff"
-          dropdownIconRippleColor="transparent" 
+          dropdownIconRippleColor="transparent"
         >
+          <Picker.Item
+            style={styles.pikerItem}
+            label="Seleccione una cosecha"
+            value={null}
+            color="#999999"
+          />
+          
           {options.map((option) => (
             <Picker.Item
               style={styles.pikerItem}
@@ -44,9 +53,10 @@ function DropdownField<T extends string>({
         </Picker>
 
         <View style={styles.arrowContainer} pointerEvents="none">
-        <Entypo name="chevron-down" size={16} color="#4D406E" />
+          <Entypo name="chevron-down" size={16} color="#4D406E" />
         </View>
       </View>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   );
 }
@@ -71,10 +81,11 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "100%",
-    backgroundColor: "transparent",
+    backgroundColor: "#FFFFFF",
     color: "#000000",
   },
   pikerItem: {
+    backgroundColor: "#FFFFFF",
     color: "#000000",
   },
   arrowContainer: {
@@ -86,6 +97,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 2,
     elevation: 2,
+  },
+  errorText: {
+    color: "#FF4444",
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 4,
   },
 });
 

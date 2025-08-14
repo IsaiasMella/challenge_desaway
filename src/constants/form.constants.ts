@@ -19,6 +19,7 @@ export const PLACEHOLDERS = {
 export const ERROR_MESSAGES = {
   fullNameRequired: "El nombre es requerido.",
   fullNameTooShort: "El nombre debe tener más de 3 letras.",
+  cropRequired: "Selecciona una cosecha",
   tonsRequired: "Las toneladas son requeridas.",
   tonsMustBeGreaterThanZero: "Las toneladas deben ser mayores a 0.",
 };

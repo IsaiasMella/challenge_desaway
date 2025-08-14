@@ -26,7 +26,6 @@ import {
 } from "../constants/pdf.constants";
 
 export class PDFDrawingService {
-  // ---------- título + línea ----------
   static drawTitleAndLine(page: any, bold: PDFFont) {
     const title = "Reporte de Datos";
     const tw = bold.widthOfTextAtSize(title, TITLE_SIZE);
@@ -44,8 +43,6 @@ export class PDFDrawingService {
       color: COLOR_TEXT,
     });
   }
-
-  // ---------- header ----------
   static drawHeaderAndGetAnchors(page: any, bold: PDFFont, icon?: PDFImage) {
     const headerX = SECTION_X;
     const headerY = SECTION_TOP_Y - HEADER_BAR_H;
@@ -68,7 +65,35 @@ export class PDFDrawingService {
     return { textX, firstLineY };
   }
 
-  // ---------- etiqueta + valor ----------
+  static async drawHeaderAndGetAnchorsWithSvg(page: any, bold: PDFFont, svgModule: number) {
+    const headerX = SECTION_X;
+    const headerY = SECTION_TOP_Y - HEADER_BAR_H;
+    let iconRightX = headerX + ICON_OFFSET_X;
+
+    if (svgModule) {
+      try {
+        const iconY = headerY + (HEADER_BAR_H - ICON_SIZE) / 2 + ICON_SHIFT_Y;
+        await this.drawSvgPathsFromAsset(page, svgModule, {
+          x: headerX + ICON_OFFSET_X,
+          y: iconY,
+          width: ICON_SIZE,
+        });
+        iconRightX = headerX + ICON_OFFSET_X + ICON_SIZE;
+      } catch (error) {
+        console.error("Error dibujando SVG del header:", error);
+      }
+    }
+
+    const subtitle = "Información del Reporte";
+    const subX = iconRightX + HEADER_GAP;
+    const subY = headerY + (HEADER_BAR_H - SUBTITLE_SIZE) / 2 + SUBTITLE_SHIFT_Y;
+    page.drawText(subtitle, { x: subX, y: subY, size: SUBTITLE_SIZE, font: bold, color: COLOR_TEXT });
+
+    const firstLineY = subY - GAP_AFTER_SUBTITLE;
+    const textX = subX + BODY_TEXT_EXTRA_INDENT;
+    return { textX, firstLineY };
+  }
+
   static drawLabelValue(
     page: any,
     bold: PDFFont,
@@ -83,7 +108,6 @@ export class PDFDrawingService {
     page.drawText(value || "—", { x: x + lw, y, size: VALUE_SIZE, font, color: COLOR_TEXT });
   }
 
-  // ---------- etiqueta + valor multilinea ----------
   static drawLabelValueMultiLine(
     page: any,
     bold: PDFFont,
@@ -105,7 +129,6 @@ export class PDFDrawingService {
     }
   }
 
-  // ---------- logo SVG en footer (colores originales) ----------
   static async drawFooterLogoFromSvg(page: any, svgModule: number, targetWidth: number) {
     try {
       await this.drawSvgPathsFromAsset(page, svgModule, {
@@ -114,11 +137,9 @@ export class PDFDrawingService {
         width: targetWidth,
       });
     } catch {
-      /* noop */
     }
   }
 
-  // SVG → paths (sin tocar colores originales)
   private static async drawSvgPathsFromAsset(
     page: any,
     svgModule: number,

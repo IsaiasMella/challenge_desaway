@@ -4,6 +4,7 @@ import { FormStorageService } from "../services/formStorageService";
 
 type FormErrors = {
   full_name?: string;
+  crop?: string;
   tons?: string;
 };
 
@@ -19,7 +20,7 @@ export const useHarvestForm = () => {
     crop: null,
     tons: 0,
   });
-  
+
   const [tonsInput, setTonsInput] = useState<string>("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoaded, setIsLoaded] = useState(false);
@@ -57,7 +58,7 @@ export const useHarvestForm = () => {
         crop: formData.crop || undefined,
         tons: formData.tons || undefined,
       };
-      
+
       if (dataToSave.full_name || dataToSave.crop || dataToSave.tons) {
         await FormStorageService.saveFormData(dataToSave);
       }
@@ -72,9 +73,13 @@ export const useHarvestForm = () => {
     }
 
     if (field === "tons") {
-      setTonsInput(value);
-      const numericValue = Number(value.replace(",", "."));
-      setFormData(prev => ({ ...prev, tons: isNaN(numericValue) ? 0 : numericValue }));
+      const regex = /^[0-9]*[,.]?[0-9]*$/;
+      
+      if (regex.test(value) || value === "") {
+        setTonsInput(value);
+        const numericValue = Number(value.replace(",", "."));
+        setFormData(prev => ({ ...prev, tons: isNaN(numericValue) ? 0 : numericValue }));
+      }
     } else {
       setFormData(prev => ({ ...prev, [field]: value }));
     }
@@ -85,6 +90,10 @@ export const useHarvestForm = () => {
 
     if (!formData.full_name.trim()) {
       newErrors.full_name = "El nombre completo es requerido";
+    }
+
+    if (!formData.crop) {
+      newErrors.crop = "Debe seleccionar un tipo de cosecha";
     }
 
     if (formData.tons <= 0) {
@@ -102,7 +111,7 @@ export const useHarvestForm = () => {
 
     return {
       full_name: formData.full_name.trim(),
-      crop: formData.crop,
+      crop: formData.crop!,
       tons: formData.tons,
     };
   };
@@ -115,7 +124,6 @@ export const useHarvestForm = () => {
     });
     setTonsInput("");
     setErrors({});
-    
     await FormStorageService.clearFormData();
   }, []);
 

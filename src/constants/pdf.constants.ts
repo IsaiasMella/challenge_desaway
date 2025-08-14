@@ -26,7 +26,7 @@ export const VALUE_SIZE = 20;
  // Ícono del header (PDF.png)
 export const ICON_SIZE = 66.7;                        // ← tamaño del icono
 export const ICON_OFFSET_X = 8;                       // margen interno a la izquierda
-export const ICON_SHIFT_Y = -8;                       // ajuste fino vertical del icono
+export const ICON_SHIFT_Y = 55;                       // ajuste fino vertical del icono
 export const HEADER_GAP = 30;                         // espacio icono ↔ subtítulo
 export const SUBTITLE_SHIFT_Y = 10;                   // ajuste fino vertical del subtítulo
  
