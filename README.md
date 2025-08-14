@@ -17,8 +17,8 @@ Construir una app móvil que tome datos de un formulario sencillo y genere un **
 
 - **Formulario** con tres campos:
   - **Nombre completo** (texto, requerido, **mínimo 3 caracteres**)
+  - **Tipo de cultivo** (select con 5 opciones)
   - **Toneladas cosechadas** (numérico **con decimales**, requerido, **> 0**)
-  - **Tipo de cultivo** (select con ≥ 3 opciones)
 - **Validación en tiempo real** con mensajes por campo (no bloquea toda la vista; bloquea la acción de generar PDF si hay errores)
 - **Generación de PDF** con:
   - **Dos páginas** y distribución de datos: dos campos en la página 1, el tercero en la página 2
@@ -74,7 +74,6 @@ Construir una app móvil que tome datos de un formulario sencillo y genere un **
 - **expo-file-system** para escritura/almacenamiento de archivos
 - **expo-asset** para empaquetar y resolver imágenes (logo)
 - **@react-native-picker/picker** para el select (con wrapper de estilos y soporte de ícono personalizado)
-- **@react-native-community/netinfo** para detección de conectividad (estrategia strict opt-in)
 
 > **Por qué estas elecciones**
 >
